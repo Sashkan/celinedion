@@ -14,6 +14,7 @@ const newTheme = {
     // heading: "Kumbh Sans",
     // mono: "Kumbh Sans",
   },
+  color1: '#900',
 };
 
 export default newTheme
