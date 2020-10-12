@@ -1,5 +1,5 @@
 import { Box, Text } from '@chakra-ui/core'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 const InvitedPlayers = ({ players }) => {
   return (
@@ -12,7 +12,7 @@ const InvitedPlayers = ({ players }) => {
             border='1px solid #ddd'
             shadow='md'
           >
-            <p>{player.name}</p>
+            <p>{player.username}</p>
           </Box>
         )
       })}

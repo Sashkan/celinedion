@@ -9,7 +9,7 @@ const Home = ({}) => {
   const createRoom = () => {
     const id = Math.random().toString(36).substring(7)
 
-    history.push(`/room/${id}`)
+    history.push(`/room/${id}?admin=true`)
   }
 
   return (
