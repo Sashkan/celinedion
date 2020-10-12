@@ -14,8 +14,12 @@ const MessageInput = ({ sendMessage }) => {
   return (
     <Box>
       <InputGroup>
-        <Input ref={inputRef} value={message} onChange={(e) => setMessage(e.target.value)} />
-
+        <Input
+          ref={inputRef}
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder='Dites bonjour !'
+        />
         <InputRightElement width="4.5rem">
           <Button h="1.75rem" size="sm" onClick={send} bg='teal.500'>
             <Icon name="arrow-right" size="20px" />

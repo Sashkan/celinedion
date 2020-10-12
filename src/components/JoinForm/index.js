@@ -26,10 +26,6 @@ const JoinForm = ({ addUser }) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  if (location.search) {
-    return null
-  }
-
   return (
     <>
       <Modal

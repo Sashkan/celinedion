@@ -7,62 +7,63 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Divider,
 } from '@chakra-ui/core';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useReducer } from 'react'
 import { useLocation, useParams } from 'react-router-dom';
-import socketIOClient from "socket.io-client";
+// import socketIOClient from "socket.io-client";
+import io from 'socket.io-client';
+
 import GameWrapper from '../../components/GameWrapper';
 import JoinForm from '../../components/JoinForm';
 import Lobby from '../../components/Lobby';
-const ENDPOINT = "http://127.0.0.1:4001";
+import config from '../../config';
+const socket = io(config.ioEndpoint);
 
 
 // TO REMOVE AFTER PLUGGED TO REDUX
 
 const RoomContent = ({
-  step,
-  players,
-  setStep,
   messages,
+  name,
+  players,
   sendMessage,
+  setStep,
+  step,
 }) => {
-  if (step === 'lobby') {
-    return (
-      <Lobby
-        players={players}
-        messages={messages}
-        startGame={() => setStep('playing')}
-        sendMessage={sendMessage}
-      />
-    )
-  } else if (step === 'playing') {
-    return (
-      <GameWrapper
-        setStep={setStep}
-        messages={messages}
-        sendMessage={sendMessage}
-      />
-    )
+  return (
+    <Lobby
+      players={players}
+      messages={messages}
+      startGame={() => setStep('playing')}
+      sendMessage={sendMessage}
+      name={name}
+      step={step}
+    />
+  )
+}
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'addMessage':
+      return [...state, action.payload];
+    default:
+      throw new Error();
   }
 }
 
 const Room = ({ }) => {
 
   const [players, setPlayers] = useState([])
+  const [name, setName] = useState('')
   const { id } = useParams()
   const [step, setStep] = useState('lobby')
-  const [messages, setMessages] = useState([])
-  const socket = socketIOClient(ENDPOINT);
+
+  const initialState = []
+
+  const [messages, setMessages] = useReducer(reducer, initialState)
 
   useEffect(() => {
-
-    socket.on("newUser", data => {
-      setPlayers([...players, {
-        name: data.name,
-      }])
-    });
-
-
     socket.on('roomUsers', ({ users }) => {
       setPlayers(users)
     });
@@ -79,25 +80,33 @@ const Room = ({ }) => {
   }, []);
 
   const addMessage = (message) => {
-    setMessages([...messages, message])
+    setMessages({
+      type: 'addMessage',
+      payload: message,
+    })
   }
 
   const addUser = (username) => {
     socket.emit('joinRoom', { username, room: id });
+    setName(username)
   }
 
   const sendMessage = (message) => {
+    console.log('HERE', socket.id);
+
     socket.emit('chatMessage', message);
   }
 
   return (
     <div>
-      <p>{id}</p>
+      <h1>{id}</h1>
+      <Divider />
       <JoinForm
         addUser={addUser}
       />
       <RoomContent
         step={step}
+        name={name}
         players={players}
         sendMessage={sendMessage}
         setStep={setStep}
