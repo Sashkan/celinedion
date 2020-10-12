@@ -1,11 +1,13 @@
 import { Box } from '@chakra-ui/core'
 import React from 'react'
+import Header from '../../components/Header'
 
 const Main = ({ children }) => {
   return (
     <Box
-      p='10px 20%'
+      p='0 20%'
     >
+      <Header />
       {children}
     </Box>
   )

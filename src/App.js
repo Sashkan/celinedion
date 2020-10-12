@@ -10,6 +10,7 @@ import Home from "./pages/Home";
 import newTheme from "./theme";
 import Room from "./pages/Room";
 import Main from "./Layouts/Main";
+import PlayerPage from "./pages/Player";
 
 function LayoutRoute({ children, ...rest }) {
   return (
@@ -32,16 +33,12 @@ export default function App() {
       <CSSReset />
       <Router>
         <div>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-            </ul>
-          </nav>
           <Switch>
             <LayoutRoute path="/room/:id">
               <Room />
+            </LayoutRoute>
+            <LayoutRoute exact path="/player">
+              <PlayerPage />
             </LayoutRoute>
             <LayoutRoute exact path="/">
               <Home />
